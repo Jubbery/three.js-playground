@@ -1,6 +1,6 @@
 import React, { useRef, createRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { World, NaiveBroadphase, Sphere, Body, Vec3 } from "cannon-es";
 import {
     DoubleSide,
@@ -14,7 +14,7 @@ const Holes = ({ holesRef, world }) => {
     const sphereSize = 100;
     const holeRadius = 0.8;
     const innerSphereRadius = sphereSize - 2 * holeRadius;
-    const numPoints = 2000;
+    const numPoints = 1000;
 
     const points = useMemo(() => {
         const points = [];
@@ -39,7 +39,7 @@ const Holes = ({ holesRef, world }) => {
     useEffect(() => {
         world.current.broadphase = new NaiveBroadphase();
         world.current.solver.iterations = 10;
-        world.current.gravity.set(0, -9.82, 0); // Earth gravity
+        world.current.gravity.set(0, 0, 0); // Earth gravity
 
         // Add sphere container body
         const containerBody = new Body({
@@ -88,26 +88,51 @@ const Holes = ({ holesRef, world }) => {
             world.current.step(fixedTimeStep);
             accumulator -= fixedTimeStep;
         }
-
+    
         // Update positions of Cannon.js bodies based on physics simulation
         bodies.current.forEach((body, index) => {
             const position = body.position;
-            holesRef.current.children[index].position.set(position.x, position.y, position.z);
-            holesRef.current.children[index].quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
+    
+            // Check if the hole is outside the bounds of the container sphere
+            if (position.length() + holeRadius > sphereSize+1000) {
+                // Convert Cannon.js Vec3 to Three.js Vector3
+                const positionThree = new Vector3(position.x, position.y, position.z);
+    
+                // Calculate the direction vector from the container center to the hole
+                const direction = positionThree.normalize();
+    
+                // Move the hole to the container's surface
+                const newPosition = direction.multiplyScalar(sphereSize - holeRadius);
+    
+                // Update the body's position and velocity
+                body.position.copy(newPosition);
+                body.velocity.set(newPosition.x*2, newPosition.y*2, newPosition.z*2);
+    
+                // Update the Three.js mesh position
+                holesRef.current.children[index].position.set(newPosition);
+            } else {
+                // Update the Three.js mesh position and quaternion
+                holesRef.current.children[index].position.set(position.x, position.y, position.z);
+                holesRef.current.children[index].quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
+            }
         });
     });
+    
+    
 
+
+    // Create a single geometry and material instance to be shared by all holes
+    const holeGeometry = new SphereGeometry(holeRadius, 16, 16);
+    const holeMaterial = new MeshPhongMaterial({ color: "white" });
 
     return (
         <group ref={holesRef}>
             {points.map((point, index) => (
-                <mesh key={index} position={point.toArray()}>
-                    <sphereGeometry args={[holeRadius, 32, 32]} />
-                    <meshPhongMaterial color="white" />
-                </mesh>
+                <mesh key={index} position={point.toArray()} geometry={holeGeometry} material={holeMaterial} />
             ))}
         </group>
     );
+
 };
 
 const TransparentSphere = () => {
@@ -130,18 +155,45 @@ const TransparentSphere = () => {
 const SphereOfHolesCannon = () => {
     const holesRefs = useRef([...Array(1)].map(() => createRef()));
     const world = useRef(new World());
+    const [resetKey, setResetKey] = useState(0);
 
-    return world ? (
+    useEffect(() => {
+        // Reinitialize the useRef values
+        holesRefs.current = [...Array(1)].map(() => createRef());
+        world.current = new World();
+
+        const handleRefresh = () => {
+            setResetKey((prevKey) => prevKey + 1);
+            const url = new URL(window.location);
+            url.searchParams.set("timestamp", Date.now());
+            window.location.href = url.href;
+        };
+
+        window.addEventListener("beforeunload", handleRefresh);
+        return () => {
+            window.removeEventListener("beforeunload", handleRefresh);
+        };
+    }, [resetKey]); // Add resetKey to the dependencies
+
+    return (
         <>
-            <Canvas>
+            <Canvas
+                key={resetKey}
+                camera={{ position: [0, 0, 250], fov: 70 }}
+                style={{ height: '100vh', backgroundColor: 'black' }}
+            >
+                <PerspectiveCamera makeDefault position={[0, 0, 1000]} />
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
-                <TransparentSphere />
+                {/* <TransparentSphere /> */}
                 <Holes holesRef={holesRefs.current} world={world} />
                 <OrbitControls />
             </Canvas>
         </>
-    ) : null;
+    );
 };
+
+
+
 
 export default SphereOfHolesCannon;
