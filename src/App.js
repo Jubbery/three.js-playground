@@ -8,8 +8,9 @@ function App() {
   return (
     <div className="App">
       {/* <ThreeScene /> */}
-      <SphereOfHoles/>
-      {/* <SphereOfHolesCannon /> */}
+      {/* <SphereOfHoles/> */}
+      {/* <BoxOfHoles /> */}
+      <SphereOfHolesCannon />
     </div>
   );
 }
