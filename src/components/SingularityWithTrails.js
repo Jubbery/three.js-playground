@@ -23,7 +23,7 @@ const randomColor = () => {
 
 const Holes = ({ holesRef, world, trailsRef }) => {
     const sphereSize = 50;
-    const holeRadius = 0.8;
+    const holeRadius = 1.5;
     const innerSphereRadius = sphereSize - 2 * holeRadius;
     const numPoints = 2000;
 
@@ -49,7 +49,7 @@ const Holes = ({ holesRef, world, trailsRef }) => {
 
     useEffect(() => {
         const trails = points.map((point, index) => {
-            const maxTrailLength = 100; // Adjust this value to control the length of the trails
+            const maxTrailLength = 200; // Adjust this value to control the length of the trails
             const geometry = new BufferGeometry();
             const positions = new Float32Array(3 * maxTrailLength);
             geometry.setAttribute('position', new BufferAttribute(positions, 3));
@@ -151,7 +151,7 @@ const Holes = ({ holesRef, world, trailsRef }) => {
                 const direction = positionThree.normalize();
 
                 // Move the hole to the container's surface
-                const newPosition = direction.multiplyScalar((Math.random() * 1000 + 1000));
+                const newPosition = direction.multiplyScalar((Math.random() * 1000 + 100));
 
                 // Update the body's position and velocity
                 body.position.copy(newPosition);
@@ -168,23 +168,23 @@ const Holes = ({ holesRef, world, trailsRef }) => {
                 // Calculate the force vector between the container center and the hole
                 const forceDirection = new Vector3(-position.x, -position.y, -position.z);
                 const distance = forceDirection.length();
-                const forceStrength = 1000000; // Change this value to control the strength of the magnetic force
+                const forceStrength = 500000; // Change this value to control the strength of the magnetic force
                 const direction = forceDirection.normalize();
                 direction.multiplyScalar(forceStrength / Math.pow(distance, 2));
-                const length = 1;
+                body.velocity.set(direction.x, direction.y, direction.z);
+
+                // Add centripetal force
+                const centripetalForce = new Vector3().crossVectors(body.velocity, direction).normalize();
+                const centripetalStrength = 1.5; // Adjust this value to control the strength of the centripetal force
+                centripetalForce.multiplyScalar(centripetalStrength);
+                direction.add(centripetalForce);
+
                 // Apply the force to the body
-                body.velocity.set(...direction);
+                body.applyForce(new Vec3(...direction), new Vec3(0, 0, 0));
 
                 // Update the Three.js mesh position and quaternion
                 holesRef.current.children[index].position.set(position.x, position.y, position.z);
                 holesRef.current.children[index].quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
-                positions[3 * (maxTrailLength - 1)] = position.x;
-                positions[3 * (maxTrailLength - 1) + 1] = position.y;
-                positions[3 * (maxTrailLength - 1) + 2] = position.z;
-                geometry.attributes.position.needsUpdate = true;
-                updatePosition = new Vector3(position.x, position.y, position.z).normalize()
-                updatePosition.multiplyScalar(-10);
-                body.applyForce(new Vec3(...updatePosition), new Vec3(0, 0, 0));
             }
             geometry.attributes.position.needsUpdate = true;
 
@@ -194,9 +194,9 @@ const Holes = ({ holesRef, world, trailsRef }) => {
                 positions[3 * i + 1] = positions[3 * (i + 1) + 1];
                 positions[3 * i + 2] = positions[3 * (i + 1) + 2];
             }
-            // positions[3 * (maxTrailLength - 1)] = position.x;
-            // positions[3 * (maxTrailLength - 1) + 1] = position.y;
-            // positions[3 * (maxTrailLength - 1) + 2] = position.z;
+            positions[3 * (maxTrailLength - 1)] = position.x;
+            positions[3 * (maxTrailLength - 1) + 1] = position.y;
+            positions[3 * (maxTrailLength - 1) + 2] = position.z;
         });
     });
 
