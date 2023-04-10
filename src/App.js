@@ -1,6 +1,7 @@
 import './App.css';
 import BoxOfHoles from './components/BoxOfHoles';
 import Singularity from './components/Singularity';
+import SingularityWithTrails from './components/SingularityWithTrails';
 import SphereOfHoles from './components/SphereOfHoles';
 import SphereOfHolesCannon from './components/SphereOfHolesCannon';
 import ThreeScene from './components/ThreeScene';
@@ -12,7 +13,8 @@ function App() {
       {/* <SphereOfHoles/> */}
       {/* <BoxOfHoles /> */}
       {/* <SphereOfHolesCannon /> */}
-      <Singularity />
+      {/* <Singularity /> */}
+      <SingularityWithTrails />
     </div>
   );
 }

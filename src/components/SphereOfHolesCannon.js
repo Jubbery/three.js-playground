@@ -74,7 +74,7 @@ const Holes = ({ holesRef, world }) => {
             return body;
         });
         bodies.current = newBodies;
-    }, [world]);
+    }, [world, points]);
 
 
 
