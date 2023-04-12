@@ -105,7 +105,7 @@ const Holes = ({ holesRef, world, trailsRef }) => {
             const position = body.position;
 
             // Check if the hole is outside the bounds of the container sphere
-            if ((position.length() + holeRadius) <= 5) {
+            if ((position.length() + holeRadius) <= 1) {
                 // Convert Cannon.js Vec3 to Three.js Vector3
                 const positionThree = new Vector3(position.x + Math.random() - 0.5, position.y + Math.random() - 0.5, position.z + Math.random() - 0.5);
 

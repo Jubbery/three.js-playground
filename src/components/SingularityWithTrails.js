@@ -47,8 +47,9 @@ const Holes = ({ holesRef, world, trailsRef }) => {
 
     const bodies = useRef([]);
 
-    useEffect(() => {
-        const trails = points.map((point, index) => {
+    useMemo(() => {
+        const trails =
+        points.map((point, index) => {
             const maxTrailLength = 200; // Adjust this value to control the length of the trails
             const geometry = new BufferGeometry();
             const positions = new Float32Array(3 * maxTrailLength);
@@ -143,7 +144,7 @@ const Holes = ({ holesRef, world, trailsRef }) => {
             var updatePosition;
 
             // Check if the hole is outside the bounds of the container sphere
-            if ((position.length() + holeRadius) <= 5) {
+            if ((position.length() + holeRadius) <= 1) {
                 // Convert Cannon.js Vec3 to Three.js Vector3
                 const positionThree = new Vector3(position.x + Math.random() - 0.5, position.y + Math.random() - 0.5, position.z + Math.random() - 0.5);
 

@@ -7,14 +7,18 @@ const Box = () => {
     const [hovered, setHovered] = useState(false);
     const [color, setColor] = useState(new Color(0xff0000));
 
+    const randomColor = () => {
+        return Math.floor(Math.random() * 16777215);
+    };
+
     const handleClick = () => {
-        setColor(new Color(Math.random() * 0xffffff));
+        setColor(new Color(randomColor()));
     };
 
     return (
         <mesh
-            onPointerOver={() => setHovered(true)}
-            onPointerOut={() => setHovered(false)}
+            onPointerOver={() => (setHovered(true), handleClick())}
+            onPointerOut={() => (setHovered(false), handleClick())}
             onClick={handleClick}
             receiveShadow
             castShadow
@@ -31,12 +35,11 @@ const CustomCamera = () => {
         <PerspectiveCamera
             ref={cameraRef}
             makeDefault // Makes this camera the default camera for the canvas
-            fov={75}
+            fov={25}
             aspect={window.innerWidth / window.innerHeight}
             near={0.1}
             far={1000}
             position={[6, 6, 6]}
-
         />
     );
 };
@@ -55,12 +58,7 @@ const CustomDirectionalLight = () => {
         light.shadow.camera.right = 10;
         light.shadow.camera.top = 10;
         light.shadow.camera.bottom = -10;
-
         scene.add(light);
-
-        return () => {
-            scene.remove(light);
-        };
     }, [scene]);
 
     return null;
@@ -68,13 +66,14 @@ const CustomDirectionalLight = () => {
 
 const ThreeScene = () => {
     return (
-        <Canvas shadows={'percentage'}>
+        <Canvas shadows={'percentage'} style={{ height: '100vh', backgroundColor: 'white' }}>
             <CustomCamera />
             <color attach="background" args={[0.8, 0.2, 0.5]} />
             <Box />
             <CustomDirectionalLight />
-            {/* <AmbientLight intensity={0.5} /> */}
-            <OrbitControls />
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[0, 10, 10]} intensity={1} castShadow />
+            <OrbitControls enableZoom={true} enablePan={true} target={[0, 0, 0]} />
         </Canvas>
     );
 };

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, createRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import {
     DoubleSide,
     BufferGeometry,
@@ -281,6 +281,21 @@ const SphereWithBorders = () => {
     );
 };
 
+const CustomCamera = () => {
+    const cameraRef = React.useRef();
+    return (
+        <PerspectiveCamera
+            ref={cameraRef}
+            fov={75}
+            makeDefault
+            aspect={window.innerWidth / window.innerHeight}
+            near={0.1}
+            far={1000}
+            position={[600/4, 600/4-40, 600/4-10]}
+        />
+    );
+};
+
 
 const BoxOfHoles = () => {
     const holesRefs = useRef([...Array(1)].map(() => createRef()));
@@ -292,7 +307,7 @@ const BoxOfHoles = () => {
         >
             <ambientLight intensity={0.5} />
             <directionalLight position={[0, 10, 10]} intensity={1} castShadow />
-
+            <CustomCamera />
             {[...Array(1)].map((_, index) => (
                 <group key={index} position={[0, 0, -index * 1]}>
                     <Holes holesRef={holesRefs.current[index]} />
@@ -308,4 +323,3 @@ const BoxOfHoles = () => {
 };
 
 export default BoxOfHoles;
-// style={{ height: '80vh', width: '80vw', backgroundColor: 'white' }}
