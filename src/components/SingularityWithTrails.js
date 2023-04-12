@@ -271,7 +271,11 @@ const SingularityWithTrails = () => {
                 camera={{ position: [0, 0, 250], fov: 70 }}
                 style={{ height: '100vh', backgroundColor: 'black' }}
             >
-                <PerspectiveCamera makeDefault position={[0, 0, 1000]} />
+                <PerspectiveCamera 
+                makeDefault 
+                position={[0, 0, 1000]} 
+                aspect={window.innerWidth / window.innerHeight}
+                />
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
                 <TransparentSphere />

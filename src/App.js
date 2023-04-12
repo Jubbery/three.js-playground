@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import BoxOfHoles from './components/BoxOfHoles';
 import Singularity from './components/Singularity';
@@ -14,13 +14,20 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
 function App() {
-  const [trailsActive, setTrailsActive] = useState(false);
-  const [activeComponent, setActiveComponent] = useState('ThreeScene');
+  const [trailsActive, setTrailsActive] = useState(localStorage.getItem('trailsActive') === 'true');
+  const [activeComponent, setActiveComponent] = useState(localStorage.getItem('activeComponent') || 'ThreeScene');
+
+  useEffect(() => {
+    localStorage.setItem('trailsActive', trailsActive);
+  }, [trailsActive]);
+
+  useEffect(() => {
+    localStorage.setItem('activeComponent', activeComponent);
+  }, [activeComponent]);
 
   const handleComponentChange = (component) => {
     setActiveComponent(component);
   };
-
   const renderComponent = () => {
     switch (activeComponent) {
       case 'ThreeScene':
@@ -36,10 +43,29 @@ function App() {
       case 'SingularityWithTrails':
         return (
           <>
-            <Button sx={{ paddingTop: "10px" }} variant='outlined' onClick={() => setTrailsActive(!trailsActive)}>Toggle Trails</Button>
+            <Button
+              sx={{
+                position: "absolute",
+                justifyContent: "center",
+                zIndex: 10,
+                marginTop: "10px",
+                backgroundColor: 'transparent',
+                borderColor: (theme) => `rgba(${theme.palette.text.primary}, 0.5)`,
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                  borderColor: (theme) => `rgba(${theme.palette.text.primary}, 0.7)`,
+                },
+              }}
+              fullWidth
+              variant="outlined"
+              onClick={() => setTrailsActive(!trailsActive)}
+            >
+              Toggle Trails
+            </Button>
             {trailsActive ? <SingularityWithTrails /> : <SingularityWithoutTrails />}
           </>
         );
+        
       default:
         return null;
     }
