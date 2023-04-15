@@ -208,7 +208,7 @@ const SphereOfHoles = () => {
             {[...Array(1)].map((_, index) => (
                 <group key={index} position={[0, 0, -index * 1]}>
                     <Holes holesRef={holesRefs.current[index]} />
-                    <LineConnectionsFarthest holesRef={holesRefs.current[index]} />
+                    {/* <LineConnectionsFarthest holesRef={holesRefs.current[index]} /> */}
                     <LineConnectionsClosest holesRef={holesRefs.current[index]} />
                 </group>
             ))}

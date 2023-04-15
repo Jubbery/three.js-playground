@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import BoxOfHoles from './components/BoxOfHoles';
-import Singularity from './components/Singularity';
-import SingularityWithTrails from './components/SingularityWithTrails';
-import SphereOfHoles from './components/SphereOfHoles';
-import SphereOfHolesCannon from './components/SphereOfHolesCannon';
-import ThreeScene from './components/ThreeScene';
-import SingularityWithoutTrails from './components/SingularityWithoutTrails';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
+import BoxOfHoles from './components/threeScenes/BoxOfHoles';
+import Singularity from './components/threeScenes/Singularity';
+import SingularityWithTrails from './components/threeScenes/SingularityWithTrails';
+import SphereOfHoles from './components/threeScenes/SphereOfHoles';
+import SphereOfHolesCannon from './components/threeScenes/SphereOfHolesCannon';
+import ThreeScene from './components/threeScenes/ThreeScene';
+import SingularityWithoutTrails from './components/threeScenes/SingularityWithoutTrails';
+import SphereImage from './components/threeScenes/SphereImage';
+import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, Box } from '@mui/material'
 
 function App() {
   const [trailsActive, setTrailsActive] = useState(localStorage.getItem('trailsActive') === 'true');
@@ -28,12 +25,25 @@ function App() {
   const handleComponentChange = (component) => {
     setActiveComponent(component);
   };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const renderComponent = () => {
     switch (activeComponent) {
       case 'ThreeScene':
         return <ThreeScene />;
       case 'SphereOfHoles':
         return <SphereOfHoles />;
+      case 'SphereImage':
+        return <SphereImage />;
       case 'BoxOfHoles':
         return <BoxOfHoles />;
       case 'SphereOfHolesCannon':
@@ -65,7 +75,7 @@ function App() {
             {trailsActive ? <SingularityWithTrails /> : <SingularityWithoutTrails />}
           </>
         );
-        
+
       default:
         return null;
     }
@@ -73,32 +83,72 @@ function App() {
 
   return (
     <div className="App">
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar
+        position="static"
+        elevation={0}
+        sx={{
+          backgroundColor: 'transparent',
+          zIndex: 10,
+          borderColor: (theme) => `rgba(${theme.palette.text.primary}, 0.5)`,
+          '&:hover': {
+            backgroundColor: 'transparent',
+            borderColor: (theme) => `rgba(${theme.palette.text.primary}, 0.7)`,
+          },
+        }}
+      >
+        <Toolbar
+          sx={{
+            backgroundColor: 'transparent',
+            zIndex: 10,
+            borderColor: (theme) => `rgba(${theme.palette.text.primary}, 0.5)`,
+            '&:hover': {
+              backgroundColor: 'transparent',
+              borderColor: (theme) => `rgba(${theme.palette.text.primary}, 0.7)`,
+            },
+          }}
+        >
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Three.js Playground
           </Typography>
-          <Button color="inherit" onClick={() => handleComponentChange('ThreeScene')}>
-            ThreeScene
+          <Button
+            color="inherit"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            Select Component
           </Button>
-          <Button color="inherit" onClick={() => handleComponentChange('BoxOfHoles')}>
-            BoxOfHoles
-          </Button>
-          <Button color="inherit" onClick={() => handleComponentChange('SphereOfHoles')}>
-            SphereOfHoles
-          </Button>
-          <Button color="inherit" onClick={() => handleComponentChange('SphereOfHolesCannon')}>
-            SphereOfHolesCannon
-          </Button>
-          <Button color="inherit" onClick={() => handleComponentChange('Singularity')}>
-            Singularity
-          </Button>
-          <Button color="inherit" onClick={() => handleComponentChange('SingularityWithTrails')}>
-            SingularityWithTrails
-          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => { handleComponentChange('ThreeScene'); handleClose(); }}>
+              ThreeScene
+            </MenuItem>
+            <MenuItem onClick={() => { handleComponentChange('BoxOfHoles'); handleClose(); }}>
+              BoxOfHoles
+            </MenuItem>
+            <MenuItem onClick={() => { handleComponentChange('SphereOfHoles'); handleClose(); }}>
+              SphereOfHoles
+            </MenuItem>
+            <MenuItem onClick={() => { handleComponentChange('SphereImage'); handleClose(); }}>
+              SphereImage
+            </MenuItem>
+            <MenuItem onClick={() => { handleComponentChange('SphereOfHolesCannon'); handleClose(); }}>
+              SphereOfHolesCannon
+            </MenuItem>
+            <MenuItem onClick={() => { handleComponentChange('Singularity'); handleClose(); }}>
+              Singularity
+            </MenuItem>
+            <MenuItem onClick={() => { handleComponentChange('SingularityWithTrails'); handleClose(); }}>
+              SingularityWithTrails
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
-      <Box>{renderComponent()}</Box>
+      <Box sx={{ backgroundColor: 'transparent' }}>{renderComponent()}</Box>
     </div>
   );
 }

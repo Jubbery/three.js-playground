@@ -5,7 +5,7 @@ import { DoubleSide, SphereGeometry, MeshPhongMaterial, Vector3, TextureLoader }
 
 const Holes = ({ holesRef, imageSrc }) => {
     const sphereSize = 100;
-    const holeRadius = 0.8;
+    const holeRadius = 1;
     const innerSphereRadius = sphereSize - 2 * holeRadius;
     const [renderedPoints, setRenderedPoints] = useState([]);
 
@@ -82,7 +82,7 @@ const TransparentSphere = () => {
     );
 };
 
-const SphereOfHoles = () => {
+const SphereImage = () => {
     const holesRefs = useRef([...Array(1)].map(() => createRef()));
 
     return (
@@ -105,4 +105,4 @@ const SphereOfHoles = () => {
         </Canvas>
     );
 };
-export default SphereOfHoles;
+export default SphereImage;

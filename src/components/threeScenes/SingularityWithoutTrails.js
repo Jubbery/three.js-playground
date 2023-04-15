@@ -9,12 +9,14 @@ import {
 } from 'three';
 
 import Cannon from 'cannon';
+import Spaceship from '../Vehicles/Spaceship';
+import SpaceshipCamera from '../Vehicles/SpaceshipCamera';
 
 const randomColor = () => {
     return Math.floor(Math.random() * 16777215);
 };
 
-const Holes = ({ holesRef, world, trailsRef }) => {
+const Holes = ({ holesRef, world, trailsRef, spaceshipRef, cameraRef }) => {
     const sphereSize = 50;
     const holeRadius = 1.5;
     const innerSphereRadius = sphereSize - 2 * holeRadius;
@@ -144,6 +146,22 @@ const Holes = ({ holesRef, world, trailsRef }) => {
                 holesRef.current.children[index].quaternion.set(body.quaternion.x, body.quaternion.y, body.quaternion.z, body.quaternion.w);
             }
         });
+
+        if (spaceshipRef.current && cameraRef.current) {
+            // Calculate the desired camera position
+            const offset = new Vector3(0, 5, 10); // Adjust the offset to change the camera's distance and angle to the spaceship
+            const desiredPosition = spaceshipRef.current.localToWorld(offset.clone());
+
+            // Smoothly interpolate between the current position and the desired position
+            const currentPosition = cameraRef.current.position.clone();
+            currentPosition.lerp(desiredPosition, 0.1);
+
+            // Update the camera's position
+            cameraRef.current.position.set(currentPosition);
+
+            // Look at the spaceship
+            cameraRef.current.lookAt(spaceshipRef.current.position);
+        }
     });
 
 
@@ -185,6 +203,8 @@ const SingularityWithoutTrails = () => {
     const holesRefs = useRef([...Array(1)].map(() => createRef()));
     const world = useRef(new World());
     const [resetKey, setResetKey] = useState(0);
+    const spaceshipRef = useRef();
+    const cameraRef = useRef(); // Add this useRef
 
     useEffect(() => {
         // Reinitialize the useRef values
@@ -205,20 +225,19 @@ const SingularityWithoutTrails = () => {
     }, [resetKey]); // Add resetKey to the dependencies
 
     return (
-        <>
-            <Canvas
-                key={resetKey}
-                camera={{ position: [0, 0, 250], fov: 70 }}
-                style={{ height: '100vh', backgroundColor: 'black' }}
-            >
-                <PerspectiveCamera makeDefault position={[0, 0, 1000]} />
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} />
-                <TransparentSphere />
-                <Holes holesRef={holesRefs.current} world={world} />
-                <OrbitControls />
-            </Canvas>
-        </>
+        <Canvas
+            key={resetKey}
+            camera={{ position: [0, 0, 250], fov: 70 }}
+            style={{ height: '100vh', backgroundColor: 'black' }}
+        >
+            <Spaceship ref={spaceshipRef} />
+            <SpaceshipCamera ref={cameraRef} />
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
+            <TransparentSphere />
+            <Holes holesRef={holesRefs.current} world={world} spaceshipRef={spaceshipRef} cameraRef={cameraRef} />
+            <OrbitControls />
+        </Canvas>
     );
 };
 
