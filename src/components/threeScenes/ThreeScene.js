@@ -44,7 +44,7 @@ const CustomCamera = () => {
     );
 };
 
-const CustomDirectionalLight = () => {
+const MyDirectionalLight = () => {
     const { scene } = useThree();
 
     React.useEffect(() => {
@@ -70,7 +70,7 @@ const ThreeScene = () => {
             <CustomCamera />
             <color attach="background" args={[0.8, 0.2, 0.5]} />
             <Box />
-            <CustomDirectionalLight />
+            <MyDirectionalLight />
             <ambientLight intensity={0.5} />
             <directionalLight position={[0, 10, 10]} intensity={1} castShadow />
             <OrbitControls enableZoom={true} enablePan={true} target={[0, 0, 0]} />
