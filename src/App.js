@@ -72,7 +72,7 @@ function App() {
             >
               Toggle Trails
             </Button>
-            {trailsActive ? <SingularityWithTrails /> : <SingularityWithoutTrails />}
+            {<SingularityWithTrails useTrails={trailsActive} />}
           </>
         );
 
