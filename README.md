@@ -3,10 +3,10 @@
 
 
 This project was made using:
-- React.js -> [https://react.dev/](https://react.dev/)
-- Material UI -> [https://mui.com/](https://mui.com/)
-- Three.js -> [https://threejs.org/](http://threejs.org/)
-- Cannon.js -> [Cannon.js on GitHub](https://github.com/schteppe/cannon.js/)
+- [React.js](https://react.dev/)
+- [Material UI](https://mui.com/)
+- [Three.js](http://threejs.org/)
+- [Cannon.js](https://github.com/schteppe/cannon.js/)
 
 ## How to run
 
@@ -14,7 +14,8 @@ In the project directory, you can run:
 ### `npm install`
 ### `npm start`
 
-The app currently can only run "efficiently" in development mode.\
+The app currently only runs "efficiently" in development mode.\
+
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.
