@@ -1,6 +1,6 @@
-# Independent Study - Three.js Simulations
-## Spring 2023
-### Jack Roberts
+# Jack Roberts - Spring 2023
+## Independent Study - Three.js Simulations
+
 
 This project was made using:
 - React.js -> [https://react.dev/](https://react.dev/)
