@@ -6,9 +6,9 @@ import SingularityWithTrails from './components/threeScenes/SingularityWithTrail
 import SphereOfHoles from './components/threeScenes/SphereOfHoles';
 import SphereOfHolesCannon from './components/threeScenes/SphereOfHolesCannon';
 import ThreeScene from './components/threeScenes/ThreeScene';
-import SingularityWithoutTrails from './components/threeScenes/SingularityWithoutTrails';
 import SphereImage from './components/threeScenes/SphereImage';
 import { AppBar, Toolbar, Typography, Button, Menu, MenuItem, Box } from '@mui/material'
+import HyperCube from './components/threeScenes/HyperCube';
 
 function App() {
   const [trailsActive, setTrailsActive] = useState(localStorage.getItem('trailsActive') === 'true');
@@ -46,6 +46,8 @@ function App() {
         return <SphereImage />;
       case 'BoxOfHoles':
         return <BoxOfHoles />;
+      case 'HyperCube':
+        return <HyperCube />;
       case 'SphereOfHolesCannon':
         return <SphereOfHolesCannon />;
       case 'Singularity':
@@ -125,25 +127,25 @@ function App() {
             onClose={handleClose}
           >
             <MenuItem onClick={() => { handleComponentChange('ThreeScene'); handleClose(); }}>
-              ThreeScene
+              Color Box
             </MenuItem>
             <MenuItem onClick={() => { handleComponentChange('BoxOfHoles'); handleClose(); }}>
-              BoxOfHoles
+              Box Of Holes
             </MenuItem>
             <MenuItem onClick={() => { handleComponentChange('SphereOfHoles'); handleClose(); }}>
-              SphereOfHoles
+              Sphere Of Holes
             </MenuItem>
-            <MenuItem onClick={() => { handleComponentChange('SphereImage'); handleClose(); }}>
-              SphereImage
+            <MenuItem onClick={() => { handleComponentChange('HyperCube'); handleClose(); }}>
+              Hyper Cube
             </MenuItem>
             <MenuItem onClick={() => { handleComponentChange('SphereOfHolesCannon'); handleClose(); }}>
-              SphereOfHolesCannon
+              Starfield
             </MenuItem>
             <MenuItem onClick={() => { handleComponentChange('Singularity'); handleClose(); }}>
               Singularity
             </MenuItem>
             <MenuItem onClick={() => { handleComponentChange('SingularityWithTrails'); handleClose(); }}>
-              SingularityWithTrails
+              Singularity With Trails
             </MenuItem>
           </Menu>
         </Toolbar>
