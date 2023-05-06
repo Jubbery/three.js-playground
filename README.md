@@ -29,9 +29,11 @@ You can navigate through the scenes using the user interface provided by Materia
 
 2. **Box of Holes**: A large box filled with smaller spheres representing holes. The spheres are randomly distributed within the box, and some spheres are connected with lines based on a probability factor. This scene demonstrates the use of advanced geometries and the combination of multiple objects to create a visually engaging 3D environment.
 
-3. **Sphere of Holes**: A sphere with randomly distributed holes throughout its surface. The holes are connected by lines based on their close and far proximities to each other, creating an intricate web of connections.
+3. **Hyper Cube**: A 3D visualization of a hypercube created by rendering eight cubes connected by their vertices. The hypercube rotates around its X and Y axes, showcasing complex geometries and transformations in Three.js.
 
-4. **Hyper Cube**: A 3D visualization of a hypercube created by rendering eight cubes connected by their vertices. The hypercube rotates around its X and Y axes, showcasing complex geometries and transformations in Three.js.
+### **The following spheres were positioned using Poisson Distribution**
+
+4. **Sphere of Holes**: A sphere with randomly distributed holes throughout its surface. The holes are connected by lines based on their close and far proximities to each other, creating an intricate web of connections.
 
 5. **Starfield**: A simulation of a starfield, where stars are represented as spheres in the 3D space. The camera can be panned and zoomed through the starfield, giving the viewer a sense of motion and depth.
 
