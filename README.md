@@ -31,12 +31,10 @@ You can navigate through the scenes using the user interface provided by Materia
 
 3. **Hyper Cube**: A 3D visualization of a hypercube created by rendering eight cubes connected by their vertices. The hypercube rotates around its X and Y axes, showcasing complex geometries and transformations in Three.js.
 
-### **The following spheres were positioned using Poisson Distribution**
-
-4. **Sphere of Holes**: A sphere with randomly distributed holes throughout its surface. The holes are connected by lines based on their close and far proximities to each other, creating an intricate web of connections.
+4. **Sphere of Holes**: A sphere with randomly distributed holes throughout its surface using Poisson Distribution. The holes are connected by lines based on their close and far proximities to each other, creating an intricate web of connections.
 
 5. **Starfield**: A simulation of a starfield, where stars are represented as spheres in the 3D space. The camera can be panned and zoomed through the starfield, giving the viewer a sense of motion and depth.
 
 6. **Singularity**: A singularity at the center of a sphere with holes getting gradually pulled in. Once a hole reaches the center it will be randomly position elsewhere in the space with an adjusted velocity.
 
-6. **Singularity With Trails**: A singularity at the center of a sphere with holes followed by trails. The holes gradually get pulled to the singularity. The trails update dynamically to create a captivating visual experience. The trails can be toggled on/off using the button at top.
+7. **Singularity With Trails**: A singularity at the center of a sphere with holes followed by trails. The holes gradually get pulled to the singularity. The trails update dynamically to create a captivating visual experience. The trails can be toggled on/off using the button at top.
